@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chi tiết sản phẩm</title>
+  <link rel="stylesheet" href="../nhathuoc/styles/index.css" />
+  <link rel="stylesheet" href="../nhathuoc/styles/thuoc.css" />
+  <style>
+    /* Add styles for search suggestions */
+    .search-container {
+      position: relative;
+    }
+
+    #suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background-color: white;
+      border: 1px solid #ddd;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .suggestion-item {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .suggestion-item:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* Styles for buy form popup */
+    .form-popup {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      right: 15px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      max-width: 300px;
+      padding: 20px;
+      z-index: 9;
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+
+    .form-container {
+      max-width: 100%;
+    }
+
+    .form-container input[type=text], .form-container input[type=number] {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0 15px 0;
+      border: 1px solid #ccc;
+    }
+
+    .form-container .btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 10px;
+      opacity: 0.8;
+    }
+
+    .form-container .btn:hover {
+      opacity: 1;
+    }
+
+    .form-container .cancel {
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="main">
+    <header class="header">
+      <a href="./main.html" class="logo">
+        <img id="logo" src="https://cms-prod.s3-sgn09.fptcloud.com/smalls/Logo_LC_Default_2e36f42b6b.svg" alt="logo" />
+      </a>
+      <div class="search-container">
+        <input type="text" id="mySearch" onkeyup="searchSuggestions()" placeholder="Tìm thuốc" class="search">
+        <div id="suggestions"></div>
+      </div>
+      <div>
+        <button id="loginButton" onclick="openForm()" class="login">Đăng nhập</button>
+        <button onclick="openCart()" class="cart"><i class="fa-solid fa-cart-shopping"><span id="count"> 0</span></i></button>
+        <div id="cartItems" class="cart-items"></div>
+      </div>
+      
+      <div class="form-popup" id="myForm">
+        <div class="tab-container">
+          <div id="loginTab" class="tab tab-active" onclick="showForm('login')">Đăng nhập</div>
+          <div id="registerTab" class="tab" onclick="showForm('register')">Đăng ký</div>
+        </div>
+        <div id="loginForm" class="form-content form-content-active">
+          <form class="form-container" onsubmit="handleLogin(event)">
+            <h1>Đăng nhập</h1>
+            <label for="username"><b>UserName</b></label>
+            <input type="text" placeholder="Nhập UserName" name="username" required>
+            <label for="psw"><b>Mật khẩu</b></label>
+            <input type="password" placeholder="Nhập mật khẩu" name="psw" required>
+            <button type="submit" class="btn">Đăng nhập</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Đóng</button>
+          </form>
+          <div id="loginMessage" class="message"></div>
+        </div>
+        <div id="registerForm" class="form-content">
+          <form class="form-container" onsubmit="handleSubmit(event)">
+            <h1>Đăng ký</h1>
+            <label for="username"><b>User Name</b></label>
+            <input type="text" placeholder="User Name" name="username" required>
+            <label for="psw"><b>Mật khẩu</b></label>
+            <input type="password" placeholder="Nhập Mật khẩu" name="psw" required>
+            <label for="psw-repeat"><b>Nhập lại mật khẩu</b></label>
+            <input type="password" placeholder="Nhập lại mật khẩu" name="psw-repeat" required>
+            <input type="hidden" name="role" value="buyer">
+            <button type="submit" class="btn">Đăng ký</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Đóng</button>
+          </form>
+          <div id="registerMessage" class="message"></div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <nav id="navbar"></nav>
+      </div>
+    </header>
+    <div id="product-details" class="body">
+      <!-- Product details will be inserted here -->
+    </div>
+  </div>
+  
+  <!-- Buy form -->
+  <div class="form-popup" id="buyForm">
+    <form class="form-container" onsubmit="handleBuy(event)">
+      <h1>Chọn số lượng</h1>
+      <label for="quantity"><b>Số lượng</b></label>
+      <input type="number" placeholder="Nhập số lượng" name="quantity" min="1" required>
+      <button type="submit" class="btn">Xác nhận mua</button>
+      <button type="button" class="btn cancel" onclick="closeBuyForm()">Đóng</button>
+    </form>
+  </div>
+
+  <script>
+    function openForm() {
+      document.getElementById("myForm").style.display = "block";
+    }
+
+    function closeForm() {
+      document.getElementById("myForm").style.display = "none";
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      var username = event.target.username.value;
+      var password = event.target.psw.value;
+      var loginMessage = document.getElementById("loginMessage");
+      
+      fetch('http://localhost:5222/api/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: username, password: password }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.userID) {
+          loginMessage.textContent = "Đăng nhập thành công!";
+          loginMessage.style.color = "green";
+          
+          localStorage.setItem('userID', data.userID);
+
+          setTimeout(function () {
+            closeForm();
+            loginMessage.textContent = "";
+      
+            var loginButton = document.getElementById('loginButton');
+            loginButton.textContent = "Đăng xuất";
+            loginButton.setAttribute('onclick', 'logout()');
+            loginButton.setAttribute('class', 'logout');
+      
+          }, 2000);
+        } else {
+          loginMessage.textContent = "Tên đăng nhập hoặc mật khẩu không đúng.";
+          loginMessage.style.color = "red";
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        loginMessage.textContent = "Có lỗi xảy ra. Vui lòng thử lại.";
+        loginMessage.style.color = "red";
+      });
+    }
+
+    function logout() {
+      localStorage.removeItem('userID');
+      var loginButton = document.getElementById('loginButton');
+      loginButton.textContent = "Đăng nhập";
+      loginButton.setAttribute('onclick', 'openForm()');
+      loginButton.setAttribute('class', 'login');
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      var username = event.target.username.value;
+      var password = event.target.psw.value;
+      var repeatPassword = event.target['psw-repeat'].value;
+      var registerMessage = document.getElementById("registerMessage");
+    
+      if (password !== repeatPassword) {
+        registerMessage.textContent = "Mật khẩu không khớp.";
+        registerMessage.style.color = "red";
+        return;
+      }
+    
+      fetch('http://localhost:5222/api/user/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: username, password: password, role: 'buyer' }),
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+          }
+          return response.json();
+          })
+          .then(data => {
+          if (data.error === 'Username already exists') {
+          registerMessage.textContent = "Đăng ký thất bại. Tài khoản đã tồn tại.";
+          registerMessage.style.color = "red";
+          } else if (data.userID) {
+          registerMessage.textContent = "Đăng ký thành công!";
+          registerMessage.style.color = "green";
+          setTimeout(function () {
+          closeForm();
+          registerMessage.textContent = "";
+          }, 2000);
+          } else {
+          registerMessage.textContent = "Đăng ký thất bại. Vui lòng thử lại sau.";
+          registerMessage.style.color = "red";
+          }
+          })
+          .catch((error) => {
+          console.error('Error:', error);
+          registerMessage.textContent = "Có lỗi xảy ra. Vui lòng thử lại.";
+          registerMessage.style.color = "red";
+          });
+          }
+          function handleBuy(event) {
+            event.preventDefault();
+            var quantity = parseInt(event.target.quantity.value, 10);
+            if (!quantity || quantity < 1) {
+              alert("Vui lòng nhập số lượng hợp lệ.");
+              return;
+            }
+          
+            var idProduct = getQueryParameter('idProduct');
+            var product = {
+              idProduct: idProduct,
+              quantity: quantity
+            };
+          
+            // Thêm sản phẩm vào giỏ hàng ở đây
+            addToCart(product);
+          
+            // Đóng form chọn số lượng
+            closeBuyForm();
+          }
+          
+          function addToCart(product) {
+            var cartItems = localStorage.getItem('cartItems');
+            if (!cartItems) {
+              cartItems = [];
+            } else {
+              cartItems = JSON.parse(cartItems);
+            }
+          
+            // Check if the product already exists in cart
+            var existingItem = cartItems.find(item => item.idProduct === product.idProduct);
+            if (existingItem) {
+              existingItem.quantity += product.quantity;
+            } else {
+              cartItems.push(product);
+            }
+          
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            updateCartCount();
+          }
+          
+          function openCart() {
+            var cartItems = localStorage.getItem('cartItems');
+            cartItems = cartItems ? JSON.parse(cartItems) : [];
+            
+            var cartItemsDiv = document.getElementById('cartItems');
+            cartItemsDiv.innerHTML = '';
+          
+            if (cartItems.length === 0) {
+              cartItemsDiv.textContent = 'Giỏ hàng trống.';
+            } else {
+              cartItemsDiv.textContent = 'Số lượng: ' + cartItems.length;
+              var ul = document.createElement('ul');
+              cartItems.forEach(item => {
+                var li = document.createElement('li');
+                li.textContent = `ID Sản phẩm: ${item.idProduct}, Số lượng: ${item.quantity}`;
+                ul.appendChild(li);
+              });
+              cartItemsDiv.appendChild(ul);
+            }
+          }
+          
+          function updateCartCount() {
+            var cartItems = localStorage.getItem('cartItems');
+            cartItems = cartItems ? JSON.parse(cartItems) : [];
+            var countSpan = document.getElementById('count');
+            countSpan.textContent = cartItems.length.toString();
+          }
+
+          function openCart() {
+            var cartItems = localStorage.getItem('cartItems');
+            cartItems = cartItems ? JSON.parse(cartItems) : [];
+          
+            var cartItemsDiv = document.getElementById('cartItems');
+            cartItemsDiv.innerHTML = '';
+          
+            if (cartItems.length === 0) {
+              cartItemsDiv.textContent = 'Giỏ hàng trống.';
+            } else {
+              cartItemsDiv.textContent = 'Số lượng: ' + cartItems.length;
+              var ul = document.createElement('ul');
+              cartItems.forEach(item => {
+                var li = document.createElement('li');
+                li.textContent = `ID Sản phẩm: ${item.idProduct}, Số lượng: ${item.quantity}`;
+                ul.appendChild(li);
+              });
+              cartItemsDiv.appendChild(ul);
+            }
+          }
+          
+          
+          function closeBuyForm() {
+            document.getElementById("buyForm").style.display = "none";
+          }
+          
+          function getQueryParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+          }
+          
+          document.addEventListener('DOMContentLoaded', function() {
+            const idProduct = getQueryParameter('idProduct');
+            const userID = localStorage.getItem('userID');
+          
+            if (userID) {
+              var loginButton = document.getElementById('loginButton');
+              loginButton.textContent = "Đăng xuất";
+              loginButton.setAttribute('onclick', 'logout()');
+              loginButton.setAttribute('class', 'logout');
+            } else {
+              var loginButton = document.getElementById('loginButton');
+              loginButton.textContent = "Đăng nhập";
+              loginButton.setAttribute('onclick', 'openForm()');
+              loginButton.setAttribute('class', 'login');
+            }
+          
+            if (idProduct) {
+              fetch(`http://localhost:5222/api/product/${idProduct}`)
+                .then(response => response.json())
+                .then(product => {
+                  const productDetails = document.getElementById('product-details');
+                  const { name, price, unit, type, image_URL, shortDescription, brandOrigin, producer, manufacturingCountry, ingredient, dosageForms, packing, registrationNumber } = product;
+          
+                  const productDiv = document.createElement('div');
+                  productDiv.className = "container";
+                  const imgDiv = document.createElement('div');
+                  imgDiv.className = "img";
+                  const infoDiv = document.createElement('div');
+                  infoDiv.className = "info";
+          
+                  if (image_URL) {
+                    const img = document.createElement('img');
+                    img.src = image_URL;
+                    img.alt = name;
+                    imgDiv.appendChild(img);
+                  }
+          
+                  const title = document.createElement('h1');
+                  title.textContent = name;
+                  infoDiv.appendChild(title);
+          
+                  const pricePara = document.createElement('div');
+                  pricePara.className = "prices";
+                  pricePara.innerHTML = `<span>${price}đ</span><span>/ ${unit}</span>`;
+                  infoDiv.appendChild(pricePara);
+          
+                  const table = document.createElement('table');
+                  const rows = [
+                    { left: 'Chọn đơn vị tính', right: unit },
+                    { left: 'Danh mục', right: type },
+                    { left: 'Dạng bào chế', right: dosageForms },
+                    { left: 'Quy cách', right: packing },
+                    { left: 'Xuất xứ thương hiệu', right: brandOrigin },
+                    { left: 'Nhà sản xuất', right: producer },
+                    { left: 'Nước sản xuất', right: manufacturingCountry },
+                    { left: 'Thành phần', right: ingredient },
+                    { left: 'Mô tả ngắn', right: shortDescription },
+                    { left: 'Số đăng ký', right: registrationNumber },
+                  ];
+          
+                  rows.forEach(row => {
+                    const tr = document.createElement('tr');
+                    const thLeft = document.createElement('th');
+                    thLeft.className = 'table left';
+                    thLeft.textContent = row.left;
+                    const thRight = document.createElement('th');
+                    thRight.className = 'table right';
+                    thRight.textContent = row.right;
+                    tr.appendChild(thLeft);
+                    tr.appendChild(thRight);
+                    table.appendChild(tr);
+                  });
+          
+                  infoDiv.appendChild(table);
+          
+                  const buyButton = document.createElement('button');
+                  buyButton.className = 'buy';
+                  buyButton.textContent = 'Mua';
+                  buyButton.addEventListener('click', function() {
+                    document.getElementById("buyForm").style.display = "block";
+                  });
+          
+                  infoDiv.appendChild(buyButton);
+          
+                  productDiv.appendChild(imgDiv);
+                  productDiv.appendChild(infoDiv);
+                  productDetails.appendChild(productDiv);
+                })
+                .catch(error => {
+                  console.error('Error fetching product details:', error);
+                });
+            } else {
+              console.error('Product ID not found in URL');
+            }
+          });
+          
+          function searchSuggestions() {
+            const query = document.getElementById('mySearch').value;
+            const suggestionsBox = document.getElementById('suggestions');
+            suggestionsBox.innerHTML = '';
+          
+            if (query.length < 2) {
+              suggestionsBox.style.display = 'none';
+              return;
+            }
+          
+            fetch(`http://localhost:5222/api/product/search?name=${query}`)
+              .then(response => response.json())
+              .then(data => {
+                if (data.length === 0) {
+                  suggestionsBox.style.display = 'none';
+                  return;
+                }
+          
+                suggestionsBox.style.display = 'block';
+                data.forEach(product => {
+                  const suggestionItem = document.createElement('div');
+                  suggestionItem.className = 'suggestion-item';
+                  suggestionItem.textContent = product.name;
+                  suggestionItem.onclick = function() {
+                    window.location.href = `./thuoc.html?idProduct=${product.idProduct}`;
+                  };
+                  suggestionsBox.appendChild(suggestionItem);
+                });
+              })
+              .catch(error => {
+                console.error('Error fetching search suggestions:', error);
+                suggestionsBox.style.display = 'none';
+              });
+          }
+        </script>
+      </body>
+      </html>          

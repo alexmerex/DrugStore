@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nhà thuốc A Long</title>
+  <link rel="stylesheet" href="styles/index.css" />
+  <script src="https://kit.fontawesome.com/92d70a2fd8.js" crossorigin="anonymous"></script>
+  <style>
+    .search-container {
+      position: relative;
+    }
+    .suggestions {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      border: 1px solid #ccc;
+      border-top: none;
+      max-height: 300px;
+      overflow-y: auto;
+      background: white;
+      z-index: 1000;
+    }
+    .suggestion-item {
+      padding: 10px;
+      cursor: pointer;
+    }
+    .suggestion-item:hover {
+      background: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="main">
+    <header class="header">
+      <div class="logo">
+        <img id="logo" src="https://cms-prod.s3-sgn09.fptcloud.com/smalls/Logo_LC_Default_2e36f42b6b.svg" alt="logo" />
+      </div>
+      <div class="search-container">
+        <input type="text" id="mySearch" onkeyup="searchSuggestions()" placeholder="Tìm thuốc" class="search">
+        <div id="suggestions" class="suggestions"></div>
+      </div>
+      <div>
+        <button id="loginButton" onclick="openForm()" class="login">Đăng nhập</button>
+        <button onclick="openCart()" class="cart"><i class="fa-solid fa-cart-shopping"><span id="count"> 0</span></i></button>
+      </div>
+      <div id="cartItems" class="cart-items"></div>
+      <div class="form-popup" id="myForm">
+        <div class="tab-container">
+          <div id="loginTab" class="tab tab-active" onclick="showForm('login')">Đăng nhập</div>
+          <div id="registerTab" class="tab" onclick="showForm('register')">Đăng ký</div>
+        </div>
+        <div id="loginForm" class="form-content form-content-active">
+          <form class="form-container" onsubmit="handleLogin(event)">
+            <h1>Đăng nhập</h1>
+            <label for="username"><b>UserName</b></label>
+            <input type="text" placeholder="Nhập UserName" name="username" required>
+            <label for="psw"><b>Mật khẩu</b></label>
+            <input type="password" placeholder="Nhập mật khẩu" name="psw" required>
+            <button type="submit" class="btn">Đăng nhập</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Đóng</button>
+          </form>
+          <div id="loginMessage" class="message"></div>
+        </div>
+        <div id="registerForm" class="form-content">
+          <form class="form-container" onsubmit="handleSubmit(event)">
+            <h1>Đăng ký</h1>
+            <label for="username"><b>User Name</b></label>
+            <input type="text" placeholder="User Name" name="username" required>
+            <label for="psw"><b>Mật khẩu</b></label>
+            <input type="password" placeholder="Nhập Mật khẩu" name="psw" required>
+            <label for="psw-repeat"><b>Nhập lại mật khẩu</b></label>
+            <input type="password" placeholder="Nhập lại mật khẩu" name="psw-repeat" required>
+            <input type="hidden" name="role" value="buyer">
+            <button type="submit" class="btn">Đăng ký</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Đóng</button>
+          </form>
+          <div id="registerMessage" class="message"></div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <nav id="navbar"></nav>
+      </div>
+    </header>
+    <div class="container">
+      <div id="products-container"></div>
+    </div>
+  </div>
+  <script>
+    function openForm() {
+      document.getElementById("myForm").style.display = "block";
+    }
+
+    function closeForm() {
+      document.getElementById("myForm").style.display = "none";
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      var username = event.target.username.value;
+      var password = event.target.psw.value;
+      var loginMessage = document.getElementById("loginMessage");
+      
+      fetch('http://localhost:5222/api/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: username, password: password }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.userID) {
+          localStorage.setItem('userID', data.userID);
+          localStorage.setItem('role', data.role); // Lưu vai trò của người dùng
+    
+          loginMessage.textContent = "Đăng nhập thành công!";
+          loginMessage.style.color = "green";
+          
+          setTimeout(function () {
+            // Chuyển hướng dựa vào vai trò của người dùng
+            switch (data.role) {
+              case 'buyer':
+                window.location.href = './main.html'; // Trang chủ người mua
+                break;
+              case 'staff':
+                window.location.href = './seller.html'; // Trang nhân viên
+                break;
+              case 'admin':
+                window.location.href = './admin.html'; // Trang admin
+                break;
+              default:
+                // Nếu có trường hợp không xác định vai trò, quay về trang chủ
+                window.location.href = './main.html';
+                break;
+            }
+          }, 2000);
+        } else {
+          loginMessage.textContent = "Tên đăng nhập hoặc mật khẩu không đúng.";
+          loginMessage.style.color = "red";
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        loginMessage.textContent = "Có lỗi xảy ra. Vui lòng thử lại.";
+        loginMessage.style.color = "red";
+      });
+    }
+    
+
+    function logout() {
+      localStorage.removeItem('userID');
+      window.location.reload(); // Tải lại trang sau khi đăng xuất
+    }
+
+    function handleSubmit(event) {
+      event.preventDefault();
+      var username = event.target.username.value;
+      var password = event.target.psw.value;
+      var repeatPassword = event.target['psw-repeat'].value;
+      var registerMessage = document.getElementById("registerMessage");
+    
+      if (password !== repeatPassword) {
+        registerMessage.textContent = "Mật khẩu không khớp.";
+        registerMessage.style.color = "red";
+        return;
+      }
+    
+      fetch('http://localhost:5222/api/user/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: username, password: password, role: 'buyer' }),
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.error === 'Username already exists') {
+          registerMessage.textContent = "Đăng ký thất bại. Tài khoản đã tồn tại.";
+          registerMessage.style.color = "red";
+        } else if (data.userID) {
+          registerMessage.textContent = "Đăng ký thành công!";
+          registerMessage.style.color = "green";
+          setTimeout(function () {
+            closeForm();
+            registerMessage.textContent = "";
+          }, 2000);
+        } else {
+          registerMessage.textContent = "Đăng ký thất bại. Vui lòng thử lại sau.";
+          registerMessage.style.color = "red";
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        registerMessage.textContent = "Có lỗi xảy ra. Vui lòng thử lại.";
+        registerMessage.style.color = "red";
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      function fetchCategories() {
+        fetch('http://localhost:5222/api/category')
+          .then(response => response.json())
+          .then(data => {
+            const navbar = document.getElementById('navbar');
+            const productsContainer = document.getElementById('products-container');
+            
+            data.forEach(category => {
+              const categoryName = category.name;
+              const link = document.createElement('a');
+              link.href = `#${categoryName.replace(' ', '_')}`;
+              link.textContent = categoryName;
+              navbar.appendChild(link);
+
+              fetch(`http://localhost:5222/api/product/limit10/${category.iD_Category}`)
+                .then(response => response.json())
+                .then(products => {
+                  const categoryDiv = document.createElement('div');
+                  categoryDiv.id = categoryName.replace(' ', '_');
+                  categoryDiv.className = "category-section";
+
+                  const categoryTitle = document.createElement('h2');
+                  categoryTitle.textContent = categoryName;
+                  categoryDiv.appendChild(categoryTitle);
+
+                  const gridDiv = document.createElement('div');
+                  gridDiv.className = "grid-tpcn";
+
+                  products.forEach(product => {
+                    const { idProduct, name, iD_Category, price, unit, image_URL } = product;
+
+                    const gridItem = document.createElement('div');
+                    gridItem.className = "grid-1";
+
+                    if (image_URL) {
+                      const img = document.createElement('img');
+                      img.src = image_URL;
+                      img.alt = "";
+                      img.className = "grid-img";
+                      gridItem.appendChild(img);
+                    }
+                    const titleDiv = document.createElement('div');
+                    titleDiv.className = "title";
+                    const titlePara = document.createElement('p');
+                    titlePara.textContent = name;
+                    titleDiv.appendChild(titlePara);
+
+                    const pricePara = document.createElement('p');
+                    pricePara.className = "gia";
+                    pricePara.textContent = `${price}đ / ${unit}`;
+                    titleDiv.appendChild(pricePara);
+
+                    const buyLink = document.createElement('a');
+                    // Check if user is logged in
+                    const userID = localStorage.getItem('userID');
+                    if (userID) {
+                      buyLink.href = `./thuoc.html?idProduct=${idProduct}&idUser=${userID}`;
+                    } else {
+                      buyLink.href = `./thuoc.html?idProduct=${idProduct}`;
+                    }
+                    buyLink.className = "describe";
+                    buyLink.textContent = "Mua";
+                    titleDiv.appendChild(buyLink);
+
+                    gridItem.appendChild(titleDiv);
+                    gridDiv.appendChild(gridItem);
+                  });
+
+                  categoryDiv.appendChild(gridDiv);
+                  productsContainer.appendChild(categoryDiv);
+                })
+                .catch(error => {
+                  console.error(`Error fetching products for category ${category.iD_Category}:`, error);
+                });
+              });
+          })
+          .catch(error => {
+            console.error('Error fetching categories:', error);
+          });
+      }
+
+      function checkLoginStatus() {
+        const userID = localStorage.getItem('userID');
+        if (userID) {
+          const loginButton = document.getElementById('loginButton');
+          loginButton.textContent = "Đăng xuất";
+          loginButton.setAttribute('onclick', 'logout()');
+          loginButton.setAttribute('class', 'logout');
+        }
+      }
+
+      fetchCategories();
+      checkLoginStatus();
+    });
+
+    function searchSuggestions() {
+      const input = document.getElementById('mySearch').value;
+      const suggestionsContainer = document.getElementById('suggestions');
+
+      if (input.length === 0) {
+        suggestionsContainer.innerHTML = '';
+        return;
+      }
+
+      fetch(`http://localhost:5222/api/product/search?name=${input}`)
+        .then(response => response.json())
+        .then(data => {
+          suggestionsContainer.innerHTML = '';
+          data.forEach(product => {
+            const suggestionItem = document.createElement('div');
+            suggestionItem.className = 'suggestion-item';
+            suggestionItem.textContent = product.name;
+            suggestionItem.onclick = () => {
+              // Redirect to product details page
+              const userID = localStorage.getItem('userID');
+              if (userID) {
+                window.location.href = `./thuoc.html?idProduct=${product.idProduct}&idUser=${userID}`;
+              } else {
+                window.location.href = `./thuoc.html?idProduct=${product.idProduct}`;
+              }
+            };
+            suggestionsContainer.appendChild(suggestionItem);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching search suggestions:', error);
+        });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+{
+  "User": [
+    {
+      "UserID": 1,
+      "UserName": "buyer1",
+      "Role": "buyer",
+      "Password": "1"
+    },
+    {
+      "UserID": 2,
+      "UserName": "staff1",
+      "Role": "staff",
+      "Password": "1"
+    },
+    {
+      "UserID": 3,
+      "UserName": "admin1",
+      "Role": "admin",
+      "Password": "1"
+    }
+  ],
+  "Category": [
+    {
+      "ID_Category": 1,
+      "Name": "Thực phẩm chức năng"
+    },
+    {
+      "ID_Category": 2,
+      "Name": "Dược mỹ phẩm"
+    },
+    {
+      "ID_Category": 3,
+      "Name": "Chăm sóc cá nhân"
+    }
+  ],
+  "Product": [
+    {
+      "IDProduct": 1,
+      "Name": "Viên uống Precare Mama Diamond cung cấp các vitamin khoáng chất cho phụ nữ mang thai (30 viên)",
+      "ID_Category": 1,
+      "Price": 185000,
+      "Unit": "Hộp",
+      "Type": "Vitamin & Khoáng chất",
+      "DosageForms": "Viên nang mềm",
+      "Packing": "Hộp 30 Viên",
+      "BrandOrigin": "Việt Nam",
+      "Producer": "CÔNG TY DƯỢC PHẨM VÀ THƯƠNG MẠI THÀNH CÔNG - TNHH",
+      "ManufacturingCountry": "Việt Nam",
+      "Ingredient": "DHA EPA L-Carnitine Calci from milk Kẽm oxide Lysine HCl Sắt fumarate Phốt pho Magie oxide Vitamin B3 Vitamin B5 Vitamin E Vitamin B1 Vitamin B2 Vitamin B6 Axit Folic Đồng sulfate Mangan sulfate Vitamin A Vitamin D3 KIO3 Vitamin H Vitamin K2 (015%) Selen (2‰)",
+      "ShortDescription": "Precare Mama Diamond bổ sung DHA EPA các vitamin khoáng chất và acid amin cho phụ nữ mang thai và trong thời kỳ cho con bú. Duy trì sức khỏe nâng cao sức đề kháng cho bà mẹ.",
+      "RegistrationNumber": "10347/2019/ÐKSP",
+      "Image_URL": "https://cdn.nhathuoclongchau.com.vn/unsafe/373x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_09581_5712979ba0.jpg"
+    },
+    {
+      "IDProduct": 2,
+      "Name": "Viên sủi Kudos Bone hương cam bổ sung canxi vitamin K2 vitamin D3 cho cơ thể (20 viên)",
+      "ID_Category": 1,
+      "Price": 90400,
+      "Unit": "Tuýp",
+      "Type": "Vitamin & Khoáng chất",
+      "DosageForms": "Viên sủi",
+      "Packing": "Tuýp 20 Viên",
+      "BrandOrigin": "Singapore",
+      "Producer": "SANOTACT GMBH",
+      "ManufacturingCountry": "Đức",
+      "Ingredient": "Calci carbonat Vitamin K2 Cholecalciferol (Vitamin D3)",
+      "ShortDescription": "Kudos Bone Health Calcium D3 & Vitamin K2 bổ sung canxi vitamin K2 vitamin D3 cho cơ thể.",
+      "RegistrationNumber": "776/2023/ĐKSP",
+      "Image_URL": "https://cdn.nhathuoclongchau.com.vn/unsafe/373x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_09344_b38a024079.jpg"
+    },
+    {
+      "IDProduct": 3,
+      "Name": "Viên sủi Kudos Daily Vitamins Plus Biotin & Ginseng hương cam giúp bổ sung vitamin cho cơ thể (20 viên)",
+      "ID_Category": 1,
+      "Price": 101200,
+      "Unit": "Tuýp",
+      "Type": "Vitamin & Khoáng chất",
+      "DosageForms": "Viên sủi",
+      "Packing": "Tuýp 20 Viên",
+      "BrandOrigin": "Singapore",
+      "Producer": "SANOTACT GMBH",
+      "ManufacturingCountry": "Đức",
+      "Ingredient": "Vitamin C Chiết xuất nhân sâm Niacin Vitamin E Acid pantothenic Vitamin B2 Vitamin B6 Vitamin B1 Vitamin A Acid folic Biotin Vitamin D3 Vitamin B12",
+      "ShortDescription": "Kudos Daily Vitamins Plus Biotin & Ginseng hương cam giúp bổ sung vitamin (A C D E B1 B2 B3 B5 B6 B8 B9 B12) cho cơ thể.",
+      "RegistrationNumber": "3806/2023/ĐKSP",
+      "Image_URL": "https://cdn.nhathuoclongchau.com.vn/unsafe/373x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_09335_24b9811179.jpg"
+    },
+    {
+      "IDProduct": 4,
+      "Name": "Viên sủi Kudos Vitamin C 1000mg hương chanh giúp bổ sung vitamin C cho cơ thể (20 viên)",
+      "ID_Category": 1,
+      "Price": 90400,
+      "Unit": "Tuýp",
+      "Type": "Vitamin & Khoáng chất",
+      "DosageForms": "Viên sủi",
+      "Packing": "Tuýp 20 Viên",
+      "BrandOrigin": "Singapore",
+      "Producer": "SANOTACT GMBH",
+      "ManufacturingCountry": "Đức",
+      "Ingredient": "Vitamin C",
+      "ShortDescription": "Kudos Vitamin C 1000mg bổ sung vitamin C cho cơ thể. Sản phẩm thích hợp dùng cho người từ 14 tuổi trở lên có nhu cầu bổ sung vitamin C.",
+      "RegistrationNumber": "3813/2023/ĐKSP",
+      "Image_URL": "https://cdn.nhathuoclongchau.com.vn/unsafe/373x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/DSC_09324_db795e136a.jpg"
+    },
+    {
+      "IDProduct": 5,
+      "Name": "Viên uống Calci K-2 Pharma World hỗ trợ giảm nguy cơ loãng xương (60 viên)",
+      "ID_Category": 1,
+      "Price": 470000,
+      "Unit": "Hộp",
+      "Type": "Bổ sung Canxi & Vitamin D",
+      "DosageForms": "Viên nén",
+      "Packing": "Hộp 60 Viên",
+      "BrandOrigin": "Mỹ",
+      "Producer": "ARNET PHARMACEUTICAL",
+      "ManufacturingCountry": "Hoa Kỳ",
+      "Ingredient": "Zinc Magnesium Vitamin D3 Vitamin K2 Calcium (Ca+)",
+      "ShortDescription": "Pharma World Calci K2 bổ sung canxi và một số vitamin khoáng chất giúp chắc xương tăng khả năng hấp thụ canxi cho cơ thể hỗ trợ giảm nguy cơ loãng xương.",
+      "RegistrationNumber": "4938/2022/ĐKSP",
+      "Image_URL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRO8QbhqeBfahognvhunwsoHCxKYeEQ4tAgNA&s"
+    },
+    {
+      "IDProduct": 6,
+      "Name": "Viên uống Blackmores Omega Double High Strength Fish Oil bổ sung omega (90 viên)",
+      "ID_Category": 2,
+      "Price": 551650,
+      "Unit": "Hộp",
+      "Type": "Bổ mắt, bảo vệ mắt",
+      "Dosage_forms": "Viên nang mềm",
+      "Packing": "Hộp 90 Viên",
+      "Brand_origin": "Úc",
+      "Producer": "Catalent Australia Pty. Ltd.",
+      "ManufacturingCountry": "Úc",
+      "Ingredient": "Omega-3 triglycerides cô đặc",
+      "ShortDescription": "Viên uống Blackmores Omega Double High Strength Fish Oil bổ sung omega cho cơ thể, hỗ trợ cho tim, mắt và da.",
+      "RegistrationNumber": "8591/2021/ĐKSP",
+      "Image_URL": "https://cdn.nhathuoclongchau.com.vn/unsafe/373x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/00502389_blackmores_omega_double_high_strength_fish_oil_90v_4583_634e_large_affd28dcdc.jpg"
+    },
+    {
+      "IDProduct": 7,
+      "Name": "Viên uống vitamin tổng hợp Multivitamin (90 viên)",
+      "ID_Category": 2,
+      "Price": 450000,
+      "Unit": "Lọ",
+      "Type": "Vitamin tổng hợp",
+      "DosageForms": "Viên nén",
+      "Packing": "Lọ 90 Viên",
+      "BrandOrigin": "Australia",
+      "Producer": "Swisse",
+      "ManufacturingCountry": "Australia",
+      "Ingredient": "Vitamin A, Vitamin C, Vitamin D, Vitamin E, Vitamin K, Thiamine, Riboflavin, Niacin, Vitamin B6, Folic Acid, Vitamin B12, Biotin, Pantothenic Acid, Calcium, Iron, Magnesium, Zinc, Selenium, Copper, Manganese, Chromium, Molybdenum, Iodine",
+      "ShortDescription": "Bổ sung các vitamin và khoáng chất thiết yếu cho cơ thể.",
+      "RegistrationNumber": "2022/10256/ĐKSP",
+      "Image_URL": "https://cdn.nhathuoclongchau.com.vn/unsafe/373x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/smalls/IMG_3863_f431c327df.jpg"
+    },
+    {
+      "IDProduct": 8,
+      "Name": "Viên uống Collagen Hydrolyzed with vitamin C chống oxy hóa, giảm lão hóa da (90 viên)",
+      "ID_Category": 2,
+      "Price": 500000,
+      "Unit": "Hộp",
+      "Type": "Dinh dưỡng bổ sung",
+      "DosageForms": "Viên nang mềm",
+      "Packing": "Hộp 90 Viên",
+      "BrandOrigin": "Hoa Kỳ",
+      "Producer": "NATURES BOUNTY",
+      "ManufacturingCountry": "Hoa Kỳ",
+      "Ingredient": "Collagen peptide, Vitamin C, Sodium, L-ornithine hydrochloride",
+      "ShortDescription": "Collagen With Vitamin C xuất xứ từ Mỹ là viên uống bổ sung Collagen cùng vitamin C, giúp vitamin C được hấp thụ tốt nhất, cho da căng mịn, đẩy lùi lão hóa, phục hồi và nuôi dưỡng tế bào da hiệu quả.",
+      "RegistrationNumber": "10012/2019/ÐKSP",
+      "Image_URL": "https://cdn.nhathuoclongchau.com.vn/unsafe/373x0/filters:quality(90)/https://cms-prod.s3-sgn09.fptcloud.com/00345339_collagen_with_vitamin_c_vien_bo_sung_collagen_1653_5fd9_large_cb88640c41.JPG"
+    }
+  ],
+  "Bill": [
+    {
+      "BillID": 1,
+      "BuyerID": 1,
+      "StaffID": 2,
+      "Discount": 10,
+      "Tax": 5,
+      "Date": "2023-06-12",
+      "Total": 200000
+    },
+    {
+      "BillID": 2,
+      "BuyerID": 1,
+      "StaffID": 2,
+      "Discount": 15,
+      "Tax": 5,
+      "Date": "2023-06-13",
+      "Total": 350000
+    }
+  ],
+  "BillDetail": [
+    {
+      "BillDetailID": 1,
+      "BillID": 1,
+      "IDProduct": 1,
+      "Quantity": 1,
+      "Price": 185000
+    },
+    {
+      "BillDetailID": 2,
+      "BillID": 1,
+      "IDProduct": 2,
+      "Quantity": 1,
+      "Price": 90400
+    },
+    {
+      "BillDetailID": 3,
+      "BillID": 2,
+      "IDProduct": 3,
+      "Quantity": 1,
+      "Price": 101200
+    },
+    {
+      "BillDetailID": 4,
+      "BillID": 2,
+      "IDProduct": 4,
+      "Quantity": 2,
+      "Price": 90400
+    }
+  ]
+}

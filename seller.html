@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giao Diện Người Bán - Nhà thuốc A Long</title>
+    <link rel="stylesheet" href="styles/seller.css">
+    <script src="https://kit.fontawesome.com/92d70a2fd8.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="main">
+        <header class="header">
+            <div class="logo">
+                <img id="logo" src="https://cms-prod.s3-sgn09.fptcloud.com/smalls/Logo_LC_Default_2e36f42b6b.svg" alt="logo">
+            </div>
+            <div>
+                <button onclick="logout()" class="logout">Đăng xuất</button>
+            </div>
+            <nav class="nav-links">
+                <a href="#view-drugs">Xem Thuốc</a>
+                <a href="#add-drug">Thêm Thuốc</a>
+                <a href="#edit-drug">Sửa Thuốc</a>
+                <a href="#delete-drug">Xóa Thuốc</a>
+            </nav>
+        </header>
+
+        <div class="container">
+            <section id="view-drugs" class="section">
+                <h2>Xem Thuốc</h2>
+                <div class="drug-list">
+                    <table id="drug-table">
+                        <thead>
+                            <tr>
+                                <th>Tên Thuốc</th>
+                                <th>Giá</th>
+                                <th>Danh mục</th>
+                                <th>Dạng bào chế</th>
+                                <th>Quy cách</th>
+                                <th>Thành phần</th>
+                                <th>Xuất xứ thương hiệu</th>
+                                <th>Nhà sản xuất</th>
+                                <th>Nước sản xuất</th>
+                                <th>Số đăng ký</th>
+                                <th>Mô Tả</th>
+                                <th>Hình Ảnh</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="add-drug" class="section" style="display: none;">
+                <h2>Thêm Thuốc</h2>
+                <form id="add-drug-form">
+                    <label for="drug-name">Tên Thuốc:</label>
+                    <input type="text" id="drug-name" name="drug-name" required>
+                    
+                    <label for="drug-price">Giá:</label>
+                    <input type="number" id="drug-price" name="drug-price" required>
+                    
+                    <label for="drug-description">Mô Tả:</label>
+                    <textarea id="drug-description" name="drug-description" required></textarea>
+                    
+                    <label for="drug-image">Hình Ảnh:</label>
+                    <input type="file" id="drug-image" name="drug-image" accept="image/*" required>
+                    
+                    <button type="submit">Thêm Thuốc</button>
+                </form>
+            </section>
+
+            <section id="edit-drug" class="section" style="display: none;">
+                <h2>Sửa Thuốc</h2>
+                <form id="edit-drug-form">
+                    <label for="drug-id-edit">ID Thuốc:</label>
+                    <input type="number" id="drug-id-edit" name="drug-id-edit" required>
+                    
+                    <label for="drug-name-edit">Tên Thuốc:</label>
+                    <input type="text" id="drug-name-edit" name="drug-name-edit" required>
+                    
+                    <label for="drug-price-edit">Giá:</label>
+                    <input type="number" id="drug-price-edit" name="drug-price-edit" required>
+                    
+                    <label for="drug-description-edit">Mô Tả:</label>
+                    <textarea id="drug-description-edit" name="drug-description-edit" required></textarea>
+                    
+                    <label for="drug-image-edit">Hình Ảnh:</label>
+                    <input type="file" id="drug-image-edit" name="drug-image-edit" accept="image/*" required>
+                    
+                    <button type="submit">Cập Nhật Thuốc</button>
+                </form>
+            </section>
+
+            <section id="delete-drug" class="section" style="display: none;">
+                <h2>Xóa Thuốc</h2>
+                <form id="delete-drug-form">
+                    <label for="drug-id-delete">ID Thuốc:</label>
+                    <input type="number" id="drug-id-delete" name="drug-id-delete" required>
+                    <button type="submit">Xóa Thuốc</button>
+                </form>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide all sections except the view drugs section by default
+            document.querySelectorAll('.section').forEach(function(section) {
+                section.style.display = 'none';
+            });
+
+            // Display the view drugs section when the page is loaded
+            document.getElementById('view-drugs').style.display = 'block';
+
+            // Add click event listeners to header links
+            document.querySelectorAll('.nav-links a').forEach(function(link) {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    var targetId = this.getAttribute('href').substring(1);
+                    document.querySelectorAll('.section').forEach(function(section) {
+                        section.style.display = 'none';
+                    });
+                    document.getElementById(targetId).style.display = 'block';
+                });
+            });
+
+            // Fetch and display the list of drugs from the API
+            fetch('http://localhost:5222/api/product')
+                .then(response => response.json())
+                .then(data => {
+                    const drugTable = document.getElementById('drug-table').getElementsByTagName('tbody')[0];
+                    drugTable.innerHTML = '';
+                    data.forEach(drug => {
+                        const row = drugTable.insertRow();
+                        row.insertCell().textContent = drug.name;
+                        row.insertCell().textContent = drug.price;
+                        row.insertCell().textContent = drug.iD_Category;
+                        row.insertCell().textContent = drug.dosageForms;
+                        row.insertCell().textContent = drug.packing;
+                        row.insertCell().textContent = drug.ingredient;
+                        row.insertCell().textContent = drug.brandOrigin;
+                        row.insertCell().textContent = drug.producer;
+                        row.insertCell().textContent = drug.manufacturingCountry;
+                        row.insertCell().textContent = drug.registrationNumber;
+                        row.insertCell().textContent = drug.shortDescription;
+                        const image = document.createElement('img');
+                        image.src = drug.image_URL;
+                        image.alt = drug.name;
+                        image.style.width = '50px';
+                        row.insertCell().appendChild(image);
+                    });
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+
+            // Add drug form submission handler
+            document.getElementById('add-drug-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                alert('Thuốc đã được thêm thành công!');
+            });
+
+            // Edit drug form submission handler
+            document.getElementById('edit-drug-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                alert('Thuốc đã được cập nhật thành công!');
+            });
+
+            // Delete drug form submission handler
+            document.getElementById('delete-drug-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                alert('Thuốc đã được xóa thành công!');
+            });
+
+            // Message form submission handler
+            document.getElementById('send-message-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const message = document.getElementById('message-input').value;
+                const messageContainer = document.createElement('div');
+                messageContainer.classList.add('message');
+                messageContainer.innerText = message;
+                document.querySelector('.messages').appendChild(messageContainer);
+                document.getElementById('message-input').value = '';
+            });
+        });
+
+        function logout() {
+            alert('Bạn đã đăng xuất thành công!');
+            window.location.href = 'main.html';
+        }
+    </script>
+</body>
+</html>

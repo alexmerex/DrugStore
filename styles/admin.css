@@ -1,0 +1,75 @@
+/* styles/admin.css */
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: blueviolet;
+    padding: 10px;
+    color: white;
+}
+
+.header .logo img {
+    height: 50px;
+}
+
+.header .logout {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.header .logout:hover {
+    background-color: #d32f2f;
+}
+
+.header .nav-links a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+}
+
+.header .nav-links a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    padding: 20px;
+}
+
+.section {
+    display: none;
+}
+
+.user-list {
+    display: flex; /* Sử dụng flexbox để căn giữa */
+    justify-content: center; /* Căn giữa theo chiều ngang */
+    width: auto;
+    border-right: 1px solid #ccc;
+    padding-right: 10px;
+}
+#user-table {
+    width: max-content;
+    border-collapse: collapse; /* Gộp các đường viền của ô */
+}
+
+#user-table th,
+#user-table td {
+    padding: 30px;
+    border: 1px solid #dddddd;
+    text-align: left;
+    width: 500px;
+}
+
+#user-table th {
+    background-color: #f2f2f2; /* Màu nền tiêu đề */
+}
+h2 {
+    text-align: center; /* Căn giữa tiêu đề */
+}

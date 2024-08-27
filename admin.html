@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Người Dùng - Admin</title>
+    <link rel="stylesheet" href="styles/admin.css">
+    <script src="https://kit.fontawesome.com/92d70a2fd8.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="main">
+        <header class="header">
+            <div class="logo">
+                <img id="logo" src="https://cms-prod.s3-sgn09.fptcloud.com/smalls/Logo_LC_Default_2e36f42b6b.svg" alt="logo">
+            </div>
+            <div>
+                <button onclick="logout()" class="logout">Đăng xuất</button>
+            </div>
+        </header>
+
+        <div class="container">
+            <section id="manage-users" class="section">
+                <h2>Quản Lý Người Dùng</h2>
+                <div class="user-list">
+                    <!-- DataGridView hiển thị thông tin người dùng -->
+                    <table id="user-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dữ liệu người dùng sẽ được tải từ cơ sở dữ liệu và hiển thị ở đây -->
+                        </tbody>
+                    </table>
+                </div>
+                <button id="add-user-button">Thêm Người Dùng</button>
+                <!-- Form thêm người dùng -->
+                <form id="add-user-form" style="display: none;">
+                    <h3>Thêm Người Dùng Mới</h3>
+                    <label for="user-name">User Name:</label>
+                    <input type="text" id="user-name" name="user-name" required>
+            
+                    <label for="role">Role</label>
+                    <input type="text" id="role" name="role" required>
+            
+                    <label for="password">Password</label>
+                    <input type="text" id="password" name="password" required>
+            
+                    <button type="submit">Thêm Người Dùng</button>
+                </form>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('manage-users').style.display = 'block';
+            // Tải danh sách người dùng khi trang được tải
+            loadUsers();
+
+            // Thêm sự kiện click cho nút "Thêm Người Dùng"
+            document.getElementById('add-user-button').addEventListener('click', function() {
+                // Hiện form thêm người dùng khi nhấn vào nút
+                document.getElementById('add-user-form').style.display = 'block';
+            });
+
+            // Thêm sự kiện submit cho form thêm người dùng
+            document.getElementById('add-user-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                // Thực hiện logic thêm người dùng vào cơ sở dữ liệu
+                addUser();
+            });
+        });
+
+        function loadUsers() {
+            fetch('http://localhost:5222/api/user')
+                .then(response => response.json())
+                .then(data => {
+                    const userTableBody = document.getElementById('user-table').querySelector('tbody');
+                    userTableBody.innerHTML = ''; // Xóa các hàng cũ
+
+                    data.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.userName}</td>
+                            <td>${user.role}</td>
+                        `;
+                        userTableBody.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Errorfetching users:', error);
+                });
+        }
+
+        function addUser() {
+            const userName = document.getElementById('user-name').value;
+            const role = document.getElementById('role').value;
+            const password = document.getElementById('password').value;
+
+            const newUser = {
+                UserName: userName,
+                Role: role,
+                Password: password  // Mật khẩu mặc định hoặc có thể lấy từ một trường input khác
+            };
+
+            fetch('http://localhost:5222/api/user', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newUser)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                alert('Người dùng đã được thêm thành công!');
+                document.getElementById('add-user-form').reset();
+                document.getElementById('add-user-form').style.display = 'none';
+                loadUsers();
+            })
+            .catch(error => {
+                console.error('Error adding user:', error);
+                alert('Đã xảy ra lỗi khi thêm người dùng');
+            });
+        }
+
+        function logout() {
+            // Thực hiện các thao tác cần thiết khi đăng xuất, ví dụ: xóa phiên đăng nhập, chuyển hướng người dùng đến trang đăng nhập, ...
+            alert('Bạn đã đăng xuất thành công!');
+            // Ví dụ chuyển hướng người dùng đến trang đăng nhập
+            window.location.href = 'main.html';
+        }
+    </script>
+</body>
+</html>
