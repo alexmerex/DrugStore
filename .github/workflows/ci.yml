@@ -1,0 +1,46 @@
+name: Quality gates
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Static · Build · Smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Static verification
+        run: node tests/static.mjs
+
+      - name: Restore
+        run: dotnet restore BackendApp/BackendApp.csproj
+
+      - name: Build Release
+        run: dotnet build BackendApp/BackendApp.csproj --configuration Release --no-restore
+
+      - name: Smoke and integration tests
+        run: node tests/smoke.mjs

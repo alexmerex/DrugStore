@@ -1,0 +1,35 @@
+# .NET build output
+**/[Bb]in/
+**/[Oo]bj/
+artifacts/
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Runtime data (generated from BackendApp/Data/seed.json)
+**/App_Data/
+
+# Local tools and JavaScript dependencies
+.tools/
+node_modules/
+
+# IDE and editor state
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Local configuration and logs
+.env
+.env.*
+!.env.example
+*.log
+
+# OS metadata
+.DS_Store
+Thumbs.db
+Desktop.ini

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b6b4f">
+  <meta name="description" content="Mộc An Pharmacy – chăm sóc sức khỏe chủ động với sản phẩm chính hãng, thông tin minh bạch và trải nghiệm mua sắm thuận tiện.">
+  <title>Mộc An Pharmacy | Sống khỏe mỗi ngày</title>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script type="module" src="/assets/js/home.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <div id="site-header"></div>
+
+  <main id="main-content">
+    <section class="hero section-shell" aria-labelledby="hero-title">
+      <div class="hero__content">
+        <p class="eyebrow"><span class="eyebrow__dot" aria-hidden="true"></span> Nhà thuốc trực tuyến đáng tin cậy</p>
+        <h1 id="hero-title">Chăm sóc đúng cách,<br><span>an tâm mỗi ngày.</span></h1>
+        <p class="hero__lead">Dược phẩm và sản phẩm chăm sóc sức khỏe được tuyển chọn, thông tin rõ ràng, đặt mua nhanh chóng ngay tại nhà.</p>
+
+        <form class="hero-search" id="hero-search-form" role="search">
+          <label class="sr-only" for="hero-search-input">Tìm kiếm sản phẩm</label>
+          <span class="search-mark" aria-hidden="true"></span>
+          <input id="hero-search-input" name="search" type="search" autocomplete="off" placeholder="Bạn đang tìm sản phẩm nào?">
+          <button class="button button--primary" type="submit">Tìm kiếm</button>
+        </form>
+
+        <div class="hero__trust" aria-label="Cam kết của Mộc An">
+          <div><span class="trust-icon" aria-hidden="true">✓</span><span><strong>Chính hãng</strong><small>Nguồn gốc minh bạch</small></span></div>
+          <div><span class="trust-icon" aria-hidden="true">24</span><span><strong>Hỗ trợ tận tâm</strong><small>Sẵn sàng mỗi ngày</small></span></div>
+          <div><span class="trust-icon" aria-hidden="true">↺</span><span><strong>Mua sắm dễ dàng</strong><small>Thao tác nhanh gọn</small></span></div>
+        </div>
+      </div>
+
+      <div class="hero__visual" aria-hidden="true">
+        <div class="hero-orbit hero-orbit--one"></div>
+        <div class="hero-orbit hero-orbit--two"></div>
+        <div class="hero-card hero-card--main">
+          <div class="hero-cross"><span></span><span></span></div>
+          <p>Mộc An</p>
+          <strong>Chăm sức khỏe<br>từ điều nhỏ nhất</strong>
+          <div class="hero-card__line"></div>
+        </div>
+        <div class="hero-card hero-card--note">
+          <span>+</span>
+          <p>Tra cứu thông tin<br><strong>rõ ràng · nhanh chóng</strong></p>
+        </div>
+        <span class="leaf leaf--one"></span>
+        <span class="leaf leaf--two"></span>
+        <span class="pill-shape pill-shape--one"></span>
+        <span class="pill-shape pill-shape--two"></span>
+      </div>
+    </section>
+
+    <section class="benefit-strip" aria-label="Lợi ích dịch vụ">
+      <div class="section-shell benefit-strip__inner">
+        <p><span aria-hidden="true">01</span><strong>Thông tin minh bạch</strong>Chi tiết thành phần, xuất xứ</p>
+        <p><span aria-hidden="true">02</span><strong>Lựa chọn đa dạng</strong>Nhiều nhóm sản phẩm thiết yếu</p>
+        <p><span aria-hidden="true">03</span><strong>Thanh toán thuận tiện</strong>Giỏ hàng lưu ngay trên thiết bị</p>
+      </div>
+    </section>
+
+    <section class="catalog section-shell" id="products" aria-labelledby="catalog-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Danh mục nổi bật</p>
+          <h2 id="catalog-title">Tìm sản phẩm phù hợp với bạn</h2>
+        </div>
+        <p class="section-heading__copy">Khám phá sản phẩm theo nhu cầu chăm sóc sức khỏe hằng ngày.</p>
+      </div>
+
+      <div class="catalog-toolbar">
+        <div class="category-scroll" id="category-filters" aria-label="Lọc theo danh mục"></div>
+        <label class="sort-field" for="sort-products">
+          <span>Sắp xếp</span>
+          <select id="sort-products">
+            <option value="featured">Nổi bật</option>
+            <option value="price-asc">Giá thấp đến cao</option>
+            <option value="price-desc">Giá cao đến thấp</option>
+            <option value="name">Tên A–Z</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="results-meta" id="results-meta" aria-live="polite"></div>
+      <div class="product-grid" id="product-grid" aria-busy="true"></div>
+      <div id="catalog-state"></div>
+    </section>
+
+    <section class="care-banner section-shell" id="care" aria-labelledby="care-title">
+      <div>
+        <p class="eyebrow eyebrow--light">Mộc An đồng hành</p>
+        <h2 id="care-title">Hiểu sản phẩm trước khi lựa chọn</h2>
+        <p>Mỗi sản phẩm đều có thông tin về thành phần, dạng bào chế, nhà sản xuất và nguồn gốc để bạn dễ dàng cân nhắc.</p>
+        <a class="button button--light" href="#products">Khám phá ngay</a>
+      </div>
+      <div class="care-banner__pattern" aria-hidden="true"><span>+</span><span>+</span><span>+</span></div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <noscript><p class="noscript">Vui lòng bật JavaScript để xem sản phẩm và sử dụng giỏ hàng.</p></noscript>
+</body>
+</html>

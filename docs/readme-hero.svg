@@ -1,0 +1,85 @@
+<svg width="1200" height="420" viewBox="0 0 1200 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title description">
+  <title id="title">Mộc An Pharmacy — DrugStore</title>
+  <desc id="description">Ứng dụng quản lý nhà thuốc full-stack trên ASP.NET Core 8 và JavaScript thuần.</desc>
+  <defs>
+    <linearGradient id="background" x1="70" y1="25" x2="1140" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#073F31"/>
+      <stop offset="0.55" stop-color="#0B6B4F"/>
+      <stop offset="1" stop-color="#219575"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FFFFFF" stop-opacity="0.23"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.04"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#032A20" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="420" rx="32" fill="url(#background)"/>
+  <circle cx="1100" cy="-5" r="220" fill="#FFFFFF" fill-opacity="0.06"/>
+  <circle cx="100" cy="430" r="185" fill="#DCEFE7" fill-opacity="0.08"/>
+  <path d="M835 34C976 82 1054 190 1168 198" stroke="#DCEFE7" stroke-opacity="0.13" stroke-width="2" stroke-dasharray="9 13"/>
+
+  <g transform="translate(72 67)">
+    <rect width="74" height="74" rx="22" fill="#EDF8F3"/>
+    <path d="M31 17H43V31H57V43H43V57H31V43H17V31H31V17Z" fill="#0B6B4F"/>
+    <path d="M51 13C61 11 67 16 67 25C57 27 51 23 51 13Z" fill="#E8795F"/>
+  </g>
+
+  <text x="72" y="184" fill="#FFFFFF" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="54" font-weight="750" letter-spacing="-1.5">Mộc An Pharmacy</text>
+  <text x="74" y="226" fill="#DCEFE7" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="22" font-weight="500">DrugStore · Full-stack pharmacy management</text>
+  <text x="74" y="272" fill="#FFFFFF" fill-opacity="0.83" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="17">Một host ASP.NET Core 8 · REST API cùng origin · Vanilla JavaScript</text>
+
+  <g transform="translate(72 311)" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="650">
+    <rect width="124" height="40" rx="20" fill="#FFFFFF" fill-opacity="0.13" stroke="#FFFFFF" stroke-opacity="0.18"/>
+    <circle cx="22" cy="20" r="5" fill="#8CE0BF"/>
+    <text x="36" y="25" fill="#FFFFFF">.NET 8</text>
+    <g transform="translate(138)">
+      <rect width="146" height="40" rx="20" fill="#FFFFFF" fill-opacity="0.13" stroke="#FFFFFF" stroke-opacity="0.18"/>
+      <circle cx="22" cy="20" r="5" fill="#FFD18A"/>
+      <text x="36" y="25" fill="#FFFFFF">Zero npm deps</text>
+    </g>
+    <g transform="translate(298)">
+      <rect width="147" height="40" rx="20" fill="#FFFFFF" fill-opacity="0.13" stroke="#FFFFFF" stroke-opacity="0.18"/>
+      <circle cx="22" cy="20" r="5" fill="#F49B87"/>
+      <text x="36" y="25" fill="#FFFFFF">20/20 smoke</text>
+    </g>
+  </g>
+
+  <g transform="translate(730 75)" filter="url(#shadow)" font-family="Inter, Segoe UI, Arial, sans-serif">
+    <rect width="396" height="270" rx="28" fill="#FBFAF4"/>
+    <rect x="28" y="27" width="340" height="52" rx="15" fill="#EDF8F3"/>
+    <circle cx="54" cy="53" r="10" fill="#13805F"/>
+    <rect x="76" y="43" width="126" height="9" rx="4.5" fill="#0B6B4F"/>
+    <rect x="76" y="58" width="84" height="6" rx="3" fill="#9DBAB0"/>
+    <rect x="307" y="40" width="39" height="26" rx="13" fill="#DCEFE7"/>
+    <path d="M319 53L325 59L336 46" stroke="#0B6B4F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <g transform="translate(28 101)">
+      <rect width="103" height="82" rx="16" fill="#FFFFFF" stroke="#DFE8E3"/>
+      <text x="16" y="28" fill="#61746E" font-size="11" font-weight="600">VAI TRÒ</text>
+      <text x="16" y="59" fill="#092D24" font-size="27" font-weight="760">03</text>
+      <circle cx="77" cy="55" r="16" fill="#DCEFE7"/>
+      <path d="M70 55H84M77 48V62" stroke="#0B6B4F" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(146 101)">
+      <rect width="103" height="82" rx="16" fill="#FFFFFF" stroke="#DFE8E3"/>
+      <text x="16" y="28" fill="#61746E" font-size="11" font-weight="600">API</text>
+      <text x="16" y="59" fill="#092D24" font-size="25" font-weight="760">REST</text>
+      <rect x="71" y="41" width="20" height="28" rx="6" fill="#FFF0EC"/>
+      <path d="M77 49H85M77 55H85M77 61H82" stroke="#E8795F" stroke-width="2" stroke-linecap="round"/>
+    </g>
+    <g transform="translate(264 101)">
+      <rect width="104" height="82" rx="16" fill="#FFFFFF" stroke="#DFE8E3"/>
+      <text x="16" y="28" fill="#61746E" font-size="11" font-weight="600">CHECKOUT</text>
+      <text x="16" y="59" fill="#092D24" font-size="20" font-weight="760">SAFE</text>
+      <path d="M76 45V40C76 32 89 32 89 40V45" stroke="#AA6B08" stroke-width="2.5"/>
+      <rect x="72" y="44" width="21" height="22" rx="6" fill="#FFF7DF" stroke="#AA6B08" stroke-width="2"/>
+    </g>
+
+    <rect x="28" y="202" width="340" height="42" rx="13" fill="#073F31"/>
+    <circle cx="51" cy="223" r="6" fill="#8CE0BF"/>
+    <text x="67" y="228" fill="#FFFFFF" font-size="13" font-weight="650">Build sạch · bảo mật · sẵn sàng demo</text>
+  </g>
+</svg>

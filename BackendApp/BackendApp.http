@@ -1,6 +1,193 @@
-@BackendApp_HostAddress = http://localhost:5222
+@baseUrl = http://localhost:5222
+@contentType = application/json
+@productId = 1
+@categoryId = 1
+@buyerOrderId = 3
+@staffOrderId = 2
+@userId = 1
+@checkoutKey = manual-checkout-change-before-reuse-01
 
-GET {{BackendApp_HostAddress}}/weatherforecast/
-Accept: application/json
+# Chạy từng nhóm theo thứ tự. HTTP client của IDE cần giữ cookie giữa request
+# đăng nhập và các request được bảo vệ ngay sau đó.
+# Các request POST/PUT/PATCH bên dưới làm thay đổi dữ liệu local; xem README để
+# reset `BackendApp/App_Data/database.json` về seed sau khi thử nghiệm.
 
-###
+### Health check
+GET {{baseUrl}}/health
+Accept: {{contentType}}
+
+### Phiên chưa đăng nhập / phiên hiện tại
+GET {{baseUrl}}/api/auth/session
+Accept: {{contentType}}
+
+### Danh mục công khai
+GET {{baseUrl}}/api/categories
+Accept: {{contentType}}
+
+### Tìm và lọc sản phẩm công khai
+GET {{baseUrl}}/api/products?search=vitamin&categoryId={{categoryId}}&limit=20
+Accept: {{contentType}}
+
+### Chi tiết sản phẩm
+GET {{baseUrl}}/api/products/{{productId}}
+Accept: {{contentType}}
+
+### Đăng ký buyer mới (đổi username trước khi chạy lại)
+POST {{baseUrl}}/api/auth/register
+Content-Type: {{contentType}}
+Accept: {{contentType}}
+
+{
+  "username": "buyer_demo_2",
+  "password": "buyer456"
+}
+
+### Đăng xuất tài khoản vừa đăng ký
+POST {{baseUrl}}/api/auth/logout
+Accept: {{contentType}}
+
+### Đăng nhập buyer
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+Accept: {{contentType}}
+
+{
+  "username": "buyer1",
+  "password": "buyer123"
+}
+
+### Xem đơn của buyer hiện tại
+GET {{baseUrl}}/api/orders/mine
+Accept: {{contentType}}
+
+### Tạo đơn buyer
+POST {{baseUrl}}/api/orders
+Content-Type: {{contentType}}
+Accept: {{contentType}}
+
+{
+  "idempotencyKey": "{{checkoutKey}}",
+  "items": [
+    {
+      "productId": 1,
+      "quantity": 1,
+      "expectedUnitPrice": 185000
+    },
+    {
+      "productId": 2,
+      "quantity": 2,
+      "expectedUnitPrice": 90400
+    }
+  ]
+}
+
+### Buyer hủy đơn vừa tạo (ID mặc định là 3 trên dữ liệu seed sạch)
+PATCH {{baseUrl}}/api/orders/{{buyerOrderId}}/status
+Content-Type: {{contentType}}
+Accept: {{contentType}}
+
+{
+  "status": "cancelled"
+}
+
+### Đăng xuất buyer
+POST {{baseUrl}}/api/auth/logout
+Accept: {{contentType}}
+
+### Đăng nhập staff
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+Accept: {{contentType}}
+
+{
+  "username": "staff1",
+  "password": "staff123"
+}
+
+### Staff xem toàn bộ đơn
+GET {{baseUrl}}/api/orders
+Accept: {{contentType}}
+
+### Staff hoàn tất đơn processing có sẵn trong seed
+PATCH {{baseUrl}}/api/orders/{{staffOrderId}}/status
+Content-Type: {{contentType}}
+Accept: {{contentType}}
+
+{
+  "status": "completed"
+}
+
+### Staff tạo danh mục mẫu (đổi name trước khi chạy lại)
+POST {{baseUrl}}/api/categories
+Content-Type: {{contentType}}
+Accept: {{contentType}}
+
+{
+  "name": "Danh mục kiểm thử"
+}
+
+### Staff tạo sản phẩm mẫu
+POST {{baseUrl}}/api/products
+Content-Type: {{contentType}}
+Accept: {{contentType}}
+
+{
+  "name": "Sản phẩm kiểm thử DrugStore",
+  "id_Category": 1,
+  "price": 125000,
+  "unit": "Hộp",
+  "type": "Sản phẩm mẫu",
+  "dosageForms": "Viên",
+  "packing": "Hộp 10 viên",
+  "brandOrigin": "Việt Nam",
+  "producer": "DrugStore Demo",
+  "manufacturingCountry": "Việt Nam",
+  "ingredient": "Thành phần minh họa",
+  "shortDescription": "Chỉ dùng để kiểm thử API.",
+  "registrationNumber": "DEMO-001",
+  "image_URL": "/assets/images/DSC_09581_5712979ba0.webp"
+}
+
+### Đăng xuất staff
+POST {{baseUrl}}/api/auth/logout
+Accept: {{contentType}}
+
+### Đăng nhập admin
+POST {{baseUrl}}/api/auth/login
+Content-Type: {{contentType}}
+Accept: {{contentType}}
+
+{
+  "username": "admin1",
+  "password": "admin123"
+}
+
+### Admin xem danh sách người dùng (response không chứa password)
+GET {{baseUrl}}/api/users
+Accept: {{contentType}}
+
+### Admin tạo tài khoản mẫu (đổi username trước khi chạy lại)
+POST {{baseUrl}}/api/users
+Content-Type: {{contentType}}
+Accept: {{contentType}}
+
+{
+  "username": "staff_demo_2",
+  "role": "staff",
+  "password": "staff456"
+}
+
+### Admin cập nhật tài khoản (đổi userId và dữ liệu trước khi chạy)
+PUT {{baseUrl}}/api/users/{{userId}}
+Content-Type: {{contentType}}
+Accept: {{contentType}}
+
+{
+  "username": "buyer1",
+  "role": "buyer",
+  "password": "buyer123"
+}
+
+### Kết thúc phiên admin
+POST {{baseUrl}}/api/auth/logout
+Accept: {{contentType}}

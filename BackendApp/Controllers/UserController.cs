@@ -1,165 +1,228 @@
 using BackendApp.Models;
 using BackendApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
-namespace BackendApp.Controllers
+namespace BackendApp.Controllers;
+
+[ApiController]
+[Authorize(Roles = "admin")]
+[Route("api/users")]
+public sealed class UserController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    private static readonly string[] AllowedRoles = ["buyer", "staff", "admin"];
+    private readonly JsonDataStore _store;
+    private readonly PasswordService _passwordService;
+
+    public UserController(JsonDataStore store, PasswordService passwordService)
     {
-        private readonly List<User> users;
-        private static int userCount;
-
-        public UserController()
-        {
-            users = JsonDataService.ReadDataFromJsonFile<User>();
-        }
-
-        // GET: api/user (lấy tất cả người dùng)
-        [HttpGet]
-        public ActionResult<List<User>> GetAllUsers()
-        {
-            return Ok(users);
-        }
-
-        // GET: api/user/5 (lấy người dùng theo ID)
-        [HttpGet("{id}")]
-        public ActionResult<User> GetUserById(int id)
-        {
-            var user = users.Find(u => u.UserID == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return Ok(user);
-        }
-
-        // POST: api/user (thêm người dùng mới)
-        [HttpPost]
-        public ActionResult<User> AddUser(User user)
-        {
-            user.Password = HashPassword(user.Password);
-            users.Add(user);
-            JsonDataService.SaveDataToJsonFile(users);
-            return CreatedAtAction(nameof(GetUserById), new { id = user.UserID }, user);
-        }
-
-        // PUT: api/user/5 (cập nhật thông tin người dùng)
-        [HttpPut("{id}")]
-        public ActionResult UpdateUser(int id, User userToUpdate)
-        {
-            if (id != userToUpdate.UserID)
-            {
-                return BadRequest();
-            }
-
-            var index = users.FindIndex(u => u.UserID == id);
-            if (index == -1)
-            {
-                return NotFound();
-            }
-
-            userToUpdate.Password = HashPassword(userToUpdate.Password);
-            users[index] = userToUpdate;
-            JsonDataService.SaveDataToJsonFile(users);
-            return NoContent();
-        }
-
-        // DELETE: api/user/5 (xóa người dùng)
-        [HttpDelete("{id}")]
-        public ActionResult DeleteUser(int id)
-        {
-            var userToRemove = users.Find(u => u.UserID == id);
-            if (userToRemove == null)
-            {
-                return NotFound();
-            }
-
-            users.Remove(userToRemove);
-            JsonDataService.SaveDataToJsonFile(users);
-            return NoContent();
-        }
-
-        // POST: api/user/login (đăng nhập)
-        [HttpPost("login")]
-        public ActionResult Login([FromBody] LoginRequest loginRequest)
-        {
-            var user = users.FirstOrDefault(u => u.UserName == loginRequest.Username && u.Password == loginRequest.Password);
-            if (user == null)
-            {
-                return Unauthorized();
-            }
-
-            // Return user information or token
-            var userInfo = new
-            {
-                UserID = user.UserID,
-                Username = user.UserName,
-                Role = user.Role // Include role in response
-            };
-
-            return Ok(userInfo);
-        }
-
-        private int CountUsers()
-        {
-            return users.Count;
-        }
-
-        [HttpPost("register")]
-        public ActionResult Register([FromBody] User user)
-        {
-            if (users.Any(u => u.UserName == user.UserName))
-            {
-                return BadRequest("Username already exists");
-            }
-            var userCount = CountUsers();
-            userCount++; // Tăng userCount lên 1 để tính UserID cho người dùng mới
-            user.UserID = userCount; // Đặt UserID cho người dùng mới
-            user.Role = "buyer"; // Thiết lập role mặc định là buyer
-            users.Add(user);
-            JsonDataService.SaveDataToJsonFile(users);
-            var userInfo = new
-            {
-                UserID = user.UserID,
-                Username = user.UserName,
-                Password = user.Password,
-                Role = user.Role // Include role in response
-            };
-            return Ok(userInfo);
-        }
-
-        private string HashPassword(string password)
-        {
-            using (var sha256 = SHA256.Create())
-            {
-                var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                var builder = new StringBuilder();
-                for (var i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
-            }
-        }
-
-        private bool VerifyPassword(string inputPassword, string storedHash)
-        {
-            var hashInput = HashPassword(inputPassword);
-            return hashInput == storedHash;
-        }
-
-
-        public class LoginRequest
-        {
-            public string Username { get; set; }
-            public string Password { get; set; }
-        }
+        _store = store;
+        _passwordService = passwordService;
     }
+
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<UserResponse>>> GetAll(CancellationToken cancellationToken)
+    {
+        var users = await _store.ReadAsync(data => data.Users
+            .OrderBy(user => user.UserID)
+            .Select(ToResponse)
+            .ToList(), cancellationToken);
+        return Ok(users);
+    }
+
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<UserResponse>> GetById(int id, CancellationToken cancellationToken)
+    {
+        var user = await _store.ReadAsync(data => data.Users
+            .Where(item => item.UserID == id)
+            .Select(ToResponse)
+            .FirstOrDefault(), cancellationToken);
+        return user is null ? NotFound() : Ok(user);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(CreateUserRequest request, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(request.Password))
+        {
+            ModelState.AddModelError(nameof(request.Password), "Mật khẩu không được chỉ chứa khoảng trắng.");
+            return ValidationProblem(ModelState);
+        }
+
+        var role = request.Role.Trim().ToLowerInvariant();
+        if (!AllowedRoles.Contains(role))
+        {
+            ModelState.AddModelError(nameof(request.Role), "Vai trò không hợp lệ.");
+            return ValidationProblem(ModelState);
+        }
+
+        var result = await _store.WriteAsync(data =>
+        {
+            var username = request.Username.Trim();
+            if (data.Users.Any(user =>
+                string.Equals(user.UserName, username, StringComparison.OrdinalIgnoreCase)))
+            {
+                return (User: (User?)null, Duplicate: true);
+            }
+
+            var user = new User
+            {
+                UserID = JsonDataStore.NextId(data.Users, item => item.UserID),
+                UserName = username,
+                Role = role,
+                Password = _passwordService.Hash(request.Password)
+            };
+            data.Users.Add(user);
+            return (User: user, Duplicate: false);
+        }, cancellationToken);
+
+        if (result.Duplicate || result.User is null)
+        {
+            return Conflict(new ProblemDetails { Status = 409, Title = "Tên đăng nhập đã tồn tại." });
+        }
+
+        return CreatedAtAction(nameof(GetById), new { id = result.User.UserID }, ToResponse(result.User));
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(
+        int id,
+        UpdateUserRequest request,
+        CancellationToken cancellationToken)
+    {
+        if (request.Password is not null && string.IsNullOrWhiteSpace(request.Password))
+        {
+            ModelState.AddModelError(nameof(request.Password), "Mật khẩu mới không được chỉ chứa khoảng trắng.");
+            return ValidationProblem(ModelState);
+        }
+
+        var role = request.Role.Trim().ToLowerInvariant();
+        if (!AllowedRoles.Contains(role))
+        {
+            ModelState.AddModelError(nameof(request.Role), "Vai trò không hợp lệ.");
+            return ValidationProblem(ModelState);
+        }
+
+        var currentUserId = User.GetUserId();
+        var result = await _store.WriteAsync(data =>
+        {
+            var user = data.Users.FirstOrDefault(item => item.UserID == id);
+            if (user is null)
+            {
+                return UpdateUserResult.NotFound;
+            }
+
+            var username = request.Username.Trim();
+            if (data.Users.Any(item => item.UserID != id &&
+                string.Equals(item.UserName, username, StringComparison.OrdinalIgnoreCase)))
+            {
+                return UpdateUserResult.Duplicate;
+            }
+
+            if (user.Role == "admin" && role != "admin" &&
+                data.Users.Count(item => item.Role == "admin") == 1)
+            {
+                return UpdateUserResult.LastAdmin;
+            }
+
+            if (id == currentUserId && role != "admin")
+            {
+                return UpdateUserResult.SelfDemotion;
+            }
+
+            user.UserName = username;
+            user.Role = role;
+            if (request.Password is not null)
+            {
+                user.Password = _passwordService.Hash(request.Password);
+            }
+
+            return UpdateUserResult.Success;
+        }, cancellationToken);
+
+        return result switch
+        {
+            UpdateUserResult.NotFound => NotFound(),
+            UpdateUserResult.Duplicate => Conflict(new ProblemDetails { Status = 409, Title = "Tên đăng nhập đã tồn tại." }),
+            UpdateUserResult.LastAdmin => Conflict(new ProblemDetails { Status = 409, Title = "Hệ thống phải còn ít nhất một quản trị viên." }),
+            UpdateUserResult.SelfDemotion => BadRequest(new ProblemDetails { Status = 400, Title = "Bạn không thể tự hạ quyền tài khoản đang đăng nhập." }),
+            _ => NoContent()
+        };
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
+    {
+        if (id == User.GetUserId())
+        {
+            return BadRequest(new ProblemDetails { Status = 400, Title = "Bạn không thể xóa tài khoản đang đăng nhập." });
+        }
+
+        var result = await _store.WriteAsync(data =>
+        {
+            var user = data.Users.FirstOrDefault(item => item.UserID == id);
+            if (user is null)
+            {
+                return DeleteUserResult.NotFound;
+            }
+
+            if (user.Role == "admin" && data.Users.Count(item => item.Role == "admin") == 1)
+            {
+                return DeleteUserResult.LastAdmin;
+            }
+
+            if (data.Bills.Any(bill => bill.BuyerID == id || bill.StaffID == id))
+            {
+                return DeleteUserResult.Referenced;
+            }
+
+            data.Users.Remove(user);
+            return DeleteUserResult.Success;
+        }, cancellationToken);
+
+        return result switch
+        {
+            DeleteUserResult.NotFound => NotFound(),
+            DeleteUserResult.LastAdmin => Conflict(new ProblemDetails { Status = 409, Title = "Hệ thống phải còn ít nhất một quản trị viên." }),
+            DeleteUserResult.Referenced => Conflict(new ProblemDetails { Status = 409, Title = "Tài khoản đã phát sinh đơn hàng nên không thể xóa." }),
+            _ => NoContent()
+        };
+    }
+
+    private static UserResponse ToResponse(User user)
+        => new(user.UserID, user.UserName, user.Role);
+
+    public sealed record UserResponse(int UserID, string Username, string Role);
+
+    public sealed class CreateUserRequest
+    {
+        [Required, StringLength(60, MinimumLength = 3)]
+        [RegularExpression(@"^[\p{L}\p{N}._-]+$",
+            ErrorMessage = "Tên đăng nhập chứa ký tự không hợp lệ.")]
+        public string Username { get; set; } = string.Empty;
+
+        [Required, StringLength(20)]
+        public string Role { get; set; } = string.Empty;
+
+        [Required, StringLength(128, MinimumLength = 8)]
+        public string Password { get; set; } = string.Empty;
+    }
+
+    public sealed class UpdateUserRequest
+    {
+        [Required, StringLength(60, MinimumLength = 3)]
+        [RegularExpression(@"^[\p{L}\p{N}._-]+$",
+            ErrorMessage = "Tên đăng nhập chứa ký tự không hợp lệ.")]
+        public string Username { get; set; } = string.Empty;
+
+        [Required, StringLength(20)]
+        public string Role { get; set; } = string.Empty;
+
+        [StringLength(128, MinimumLength = 8)]
+        public string? Password { get; set; }
+    }
+
+    private enum UpdateUserResult { Success, NotFound, Duplicate, LastAdmin, SelfDemotion }
+    private enum DeleteUserResult { Success, NotFound, LastAdmin, Referenced }
 }

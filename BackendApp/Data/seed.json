@@ -1,0 +1,242 @@
+{
+  "User": [
+    {
+      "UserID": 1,
+      "UserName": "buyer1",
+      "Role": "buyer",
+      "Password": "pbkdf2-sha256$120000$jghATjAvcYjD/tQvf+0WoA==$ITrQ5JsjiBNhUXpVij4qJuPLRxjqPM0j7hiRWdprG38="
+    },
+    {
+      "UserID": 2,
+      "UserName": "staff1",
+      "Role": "staff",
+      "Password": "pbkdf2-sha256$120000$IBjhp/XyvW2wh55WJFMPmg==$FKSH4SobrZHY9RACWM6cIrWhrOt0xsgntoZGA3B33Wc="
+    },
+    {
+      "UserID": 3,
+      "UserName": "admin1",
+      "Role": "admin",
+      "Password": "pbkdf2-sha256$120000$aOLXNNvAEWHLDN/Gb48P/w==$O8/3w7PJ6bdDyXaIJoPKHgryrvt4AX9FewUNRNMUKgc="
+    }
+  ],
+  "Category": [
+    {
+      "ID_Category": 1,
+      "Name": "Vitamin & khoáng chất"
+    },
+    {
+      "ID_Category": 2,
+      "Name": "Dinh dưỡng & làm đẹp"
+    },
+    {
+      "ID_Category": 3,
+      "Name": "Mẹ & bé"
+    }
+  ],
+  "Product": [
+    {
+      "IDProduct": 1,
+      "Name": "Viên uống Precare Mama Diamond cung cấp vitamin và khoáng chất cho phụ nữ mang thai (30 viên)",
+      "ID_Category": 3,
+      "Price": 185000,
+      "Unit": "Hộp",
+      "Type": "Vitamin & Khoáng chất",
+      "DosageForms": "Viên nang mềm",
+      "Packing": "Hộp 30 viên",
+      "BrandOrigin": "Việt Nam",
+      "Producer": "Công ty Dược phẩm và Thương mại Thành Công",
+      "ManufacturingCountry": "Việt Nam",
+      "Ingredient": "DHA, EPA, L-Carnitine, canxi, kẽm, lysine, sắt, magie và các vitamin thiết yếu.",
+      "ShortDescription": "Bổ sung vitamin, khoáng chất và acid amin cho phụ nữ mang thai và trong thời kỳ cho con bú.",
+      "RegistrationNumber": "10347/2019/ĐKSP",
+      "Image_URL": "/assets/images/DSC_09581_5712979ba0.webp"
+    },
+    {
+      "IDProduct": 2,
+      "Name": "Viên sủi Kudos Bone hương cam bổ sung canxi, vitamin K2 và D3 (20 viên)",
+      "ID_Category": 1,
+      "Price": 90400,
+      "Unit": "Tuýp",
+      "Type": "Vitamin & Khoáng chất",
+      "DosageForms": "Viên sủi",
+      "Packing": "Tuýp 20 viên",
+      "BrandOrigin": "Singapore",
+      "Producer": "Sanotact GmbH",
+      "ManufacturingCountry": "Đức",
+      "Ingredient": "Canxi carbonat, vitamin K2 và vitamin D3.",
+      "ShortDescription": "Bổ sung canxi, vitamin K2 và vitamin D3 cho cơ thể.",
+      "RegistrationNumber": "776/2023/ĐKSP",
+      "Image_URL": "/assets/images/DSC_09344_b38a024079.webp"
+    },
+    {
+      "IDProduct": 3,
+      "Name": "Viên sủi Kudos Daily Vitamins Plus Biotin & Ginseng hương cam (20 viên)",
+      "ID_Category": 1,
+      "Price": 101200,
+      "Unit": "Tuýp",
+      "Type": "Vitamin & Khoáng chất",
+      "DosageForms": "Viên sủi",
+      "Packing": "Tuýp 20 viên",
+      "BrandOrigin": "Singapore",
+      "Producer": "Sanotact GmbH",
+      "ManufacturingCountry": "Đức",
+      "Ingredient": "Vitamin C, nhân sâm, niacin, vitamin E, vitamin nhóm B, vitamin A và D3.",
+      "ShortDescription": "Bổ sung vitamin thiết yếu cùng biotin và nhân sâm cho cơ thể.",
+      "RegistrationNumber": "3806/2023/ĐKSP",
+      "Image_URL": "/assets/images/DSC_09335_24b9811179.webp"
+    },
+    {
+      "IDProduct": 4,
+      "Name": "Viên sủi Kudos Vitamin C 1000 mg hương chanh (20 viên)",
+      "ID_Category": 1,
+      "Price": 90400,
+      "Unit": "Tuýp",
+      "Type": "Vitamin & Khoáng chất",
+      "DosageForms": "Viên sủi",
+      "Packing": "Tuýp 20 viên",
+      "BrandOrigin": "Singapore",
+      "Producer": "Sanotact GmbH",
+      "ManufacturingCountry": "Đức",
+      "Ingredient": "Vitamin C 1000 mg.",
+      "ShortDescription": "Bổ sung vitamin C cho người từ 14 tuổi trở lên.",
+      "RegistrationNumber": "3813/2023/ĐKSP",
+      "Image_URL": "/assets/images/DSC_09324_db795e136a.webp"
+    },
+    {
+      "IDProduct": 5,
+      "Name": "Viên uống Calci K-2 Pharma World hỗ trợ giảm nguy cơ loãng xương (60 viên)",
+      "ID_Category": 1,
+      "Price": 470000,
+      "Unit": "Hộp",
+      "Type": "Bổ sung canxi & vitamin D",
+      "DosageForms": "Viên nén",
+      "Packing": "Hộp 60 viên",
+      "BrandOrigin": "Mỹ",
+      "Producer": "Arnet Pharmaceutical",
+      "ManufacturingCountry": "Hoa Kỳ",
+      "Ingredient": "Kẽm, magie, vitamin D3, vitamin K2 và canxi.",
+      "ShortDescription": "Bổ sung canxi cùng vitamin và khoáng chất, hỗ trợ xương chắc khỏe.",
+      "RegistrationNumber": "4938/2022/ĐKSP",
+      "Image_URL": "/assets/images/00503275_vien_uong_bo_sung_canxi_giam_nguy_co_loang_xuong_pharma_word_calci_k_2_60v_2299_63ed_large_322e824179.webp"
+    },
+    {
+      "IDProduct": 6,
+      "Name": "Viên uống Blackmores Omega Double High Strength Fish Oil bổ sung omega-3 (90 viên)",
+      "ID_Category": 2,
+      "Price": 551650,
+      "Unit": "Hộp",
+      "Type": "Bổ mắt, bảo vệ mắt",
+      "DosageForms": "Viên nang mềm",
+      "Packing": "Hộp 90 viên",
+      "BrandOrigin": "Úc",
+      "Producer": "Catalent Australia Pty. Ltd.",
+      "ManufacturingCountry": "Úc",
+      "Ingredient": "Omega-3 triglycerides cô đặc.",
+      "ShortDescription": "Bổ sung omega-3 cho cơ thể, hỗ trợ tim, mắt và da.",
+      "RegistrationNumber": "8591/2021/ĐKSP",
+      "Image_URL": "/assets/images/product-placeholder.svg"
+    },
+    {
+      "IDProduct": 7,
+      "Name": "Viên uống vitamin tổng hợp Multivitamin hỗ trợ sức khỏe (90 viên)",
+      "ID_Category": 1,
+      "Price": 450000,
+      "Unit": "Lọ",
+      "Type": "Vitamin tổng hợp",
+      "DosageForms": "Viên nén",
+      "Packing": "Lọ 90 viên",
+      "BrandOrigin": "Úc",
+      "Producer": "Swisse",
+      "ManufacturingCountry": "Úc",
+      "Ingredient": "Vitamin A, C, D, E, K, vitamin nhóm B, canxi, sắt, magie và kẽm.",
+      "ShortDescription": "Bổ sung các vitamin và khoáng chất thiết yếu cho cơ thể.",
+      "RegistrationNumber": "2022/10256/ĐKSP",
+      "Image_URL": "/assets/images/00500791_vien_uong_tang_de_khang_multivitamin_zn_d3_royal_care_60v_1169_62be_large_6f3a54bfa4.webp"
+    },
+    {
+      "IDProduct": 8,
+      "Name": "Viên uống Collagen Hydrolyzed with Vitamin C hỗ trợ giảm lão hóa da (90 viên)",
+      "ID_Category": 2,
+      "Price": 500000,
+      "Unit": "Hộp",
+      "Type": "Dinh dưỡng bổ sung",
+      "DosageForms": "Viên nang mềm",
+      "Packing": "Hộp 90 viên",
+      "BrandOrigin": "Hoa Kỳ",
+      "Producer": "Nature's Bounty",
+      "ManufacturingCountry": "Hoa Kỳ",
+      "Ingredient": "Collagen peptide, vitamin C, natri và L-ornithine hydrochloride.",
+      "ShortDescription": "Bổ sung collagen cùng vitamin C, hỗ trợ nuôi dưỡng da và chống oxy hóa.",
+      "RegistrationNumber": "10012/2019/ĐKSP",
+      "Image_URL": "/assets/images/product-placeholder.svg"
+    }
+  ],
+  "Bill": [
+    {
+      "BillID": 1,
+      "BuyerID": 1,
+      "StaffID": 2,
+      "Discount": 10,
+      "Tax": 5,
+      "Date": "2026-07-18T08:30:00Z",
+      "Total": 260253,
+      "Status": "completed"
+    },
+    {
+      "BillID": 2,
+      "BuyerID": 1,
+      "StaffID": 2,
+      "Discount": 15,
+      "Tax": 5,
+      "Date": "2026-07-19T03:15:00Z",
+      "Total": 251685,
+      "Status": "processing"
+    }
+  ],
+  "BillDetail": [
+    {
+      "BillDetailID": 1,
+      "BillID": 1,
+      "IDProduct": 1,
+      "Quantity": 1,
+      "Price": 185000,
+      "ProductName": "Viên uống Precare Mama Diamond cung cấp vitamin và khoáng chất cho phụ nữ mang thai (30 viên)",
+      "Unit": "Hộp",
+      "Image_URL": "/assets/images/DSC_09581_5712979ba0.webp",
+      "RegistrationNumber": "10347/2019/ĐKSP"
+    },
+    {
+      "BillDetailID": 2,
+      "BillID": 1,
+      "IDProduct": 2,
+      "Quantity": 1,
+      "Price": 90400,
+      "ProductName": "Viên sủi Kudos Bone hương cam bổ sung canxi, vitamin K2 và D3 (20 viên)",
+      "Unit": "Tuýp",
+      "Image_URL": "/assets/images/DSC_09344_b38a024079.webp",
+      "RegistrationNumber": "776/2023/ĐKSP"
+    },
+    {
+      "BillDetailID": 3,
+      "BillID": 2,
+      "IDProduct": 3,
+      "Quantity": 1,
+      "Price": 101200,
+      "ProductName": "Viên sủi Kudos Daily Vitamins Plus Biotin & Ginseng hương cam (20 viên)",
+      "Unit": "Tuýp",
+      "Image_URL": "/assets/images/DSC_09335_24b9811179.webp",
+      "RegistrationNumber": "3806/2023/ĐKSP"
+    },
+    {
+      "BillDetailID": 4,
+      "BillID": 2,
+      "IDProduct": 4,
+      "Quantity": 2,
+      "Price": 90400,
+      "ProductName": "Viên sủi Kudos Vitamin C 1000 mg hương chanh (20 viên)",
+      "Unit": "Tuýp",
+      "Image_URL": "/assets/images/DSC_09324_db795e136a.webp",
+      "RegistrationNumber": "3813/2023/ĐKSP"
+    }
+  ]
+}

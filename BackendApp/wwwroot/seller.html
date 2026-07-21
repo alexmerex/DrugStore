@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b6b4f">
+  <meta name="description" content="Không gian vận hành dành cho nhân viên Mộc An Pharmacy.">
+  <title>Vận hành cửa hàng | Mộc An Pharmacy</title>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script type="module" src="/assets/js/seller.js"></script>
+</head>
+<body class="dashboard-body">
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <div id="site-header"></div>
+
+  <main id="main-content" class="dashboard section-shell">
+    <div id="seller-guard" class="guard-area" aria-live="polite"></div>
+
+    <div id="seller-app" hidden>
+      <header class="dashboard-heading">
+        <div>
+          <p class="eyebrow">Không gian nhân viên</p>
+          <h1>Vận hành cửa hàng</h1>
+          <p>Quản lý sản phẩm, danh mục và xử lý đơn hàng trong một nơi.</p>
+        </div>
+        <button class="button button--primary" id="add-product-button" type="button"><span aria-hidden="true">＋</span> Thêm sản phẩm</button>
+      </header>
+
+      <section class="stats-grid" id="seller-stats" aria-label="Tổng quan cửa hàng"></section>
+
+      <div class="dashboard-tabs" role="tablist" aria-label="Nội dung quản lý">
+        <button type="button" role="tab" id="products-tab" aria-controls="products-panel" aria-selected="true" data-panel="products-panel">Sản phẩm</button>
+        <button type="button" role="tab" id="categories-tab" aria-controls="categories-panel" aria-selected="false" data-panel="categories-panel">Danh mục</button>
+        <button type="button" role="tab" id="orders-tab" aria-controls="orders-panel" aria-selected="false" data-panel="orders-panel">Đơn hàng</button>
+      </div>
+
+      <section class="dashboard-panel" id="products-panel" role="tabpanel" aria-labelledby="products-tab">
+        <div class="panel-toolbar">
+          <div>
+            <h2>Danh sách sản phẩm</h2>
+            <p id="product-count-label">Đang tải dữ liệu…</p>
+          </div>
+          <label class="compact-search" for="manager-product-search">
+            <span class="sr-only">Tìm sản phẩm</span>
+            <span class="search-mark" aria-hidden="true"></span>
+            <input id="manager-product-search" type="search" placeholder="Tìm theo tên, loại…">
+          </label>
+        </div>
+        <div id="products-management-state"></div>
+        <div class="table-wrap" id="products-table-wrap" hidden>
+          <table class="data-table">
+            <caption class="sr-only">Danh sách sản phẩm</caption>
+            <thead><tr><th scope="col">Sản phẩm</th><th scope="col">Danh mục</th><th scope="col">Giá bán</th><th scope="col">Đơn vị</th><th scope="col"><span class="sr-only">Thao tác</span></th></tr></thead>
+            <tbody id="products-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="dashboard-panel" id="categories-panel" role="tabpanel" aria-labelledby="categories-tab" hidden>
+        <div class="panel-toolbar">
+          <div><h2>Danh mục sản phẩm</h2><p>Tổ chức sản phẩm để người mua dễ tìm kiếm.</p></div>
+          <form class="inline-form" id="category-form">
+            <label class="sr-only" for="new-category-name">Tên danh mục mới</label>
+            <input id="new-category-name" name="name" minlength="2" maxlength="80" required placeholder="Tên danh mục mới">
+            <button class="button button--secondary" id="save-category-button" type="submit">Thêm danh mục</button>
+            <button class="button button--ghost" id="cancel-category-edit" type="button" hidden>Hủy sửa</button>
+          </form>
+        </div>
+        <div id="categories-management-state"></div>
+        <div class="category-manager-grid" id="category-manager-grid"></div>
+      </section>
+
+      <section class="dashboard-panel" id="orders-panel" role="tabpanel" aria-labelledby="orders-tab" hidden>
+        <div class="panel-toolbar">
+          <div><h2>Đơn hàng gần đây</h2><p>Theo dõi và cập nhật tiến độ xử lý đơn.</p></div>
+          <label class="select-control" for="order-status-filter">
+            <span>Lọc trạng thái</span>
+            <select id="order-status-filter">
+              <option value="all">Tất cả</option>
+              <option value="new">Mới</option>
+              <option value="processing">Đang xử lý</option>
+              <option value="completed">Hoàn tất</option>
+              <option value="cancelled">Đã hủy</option>
+            </select>
+          </label>
+        </div>
+        <div id="orders-management-state"></div>
+        <div class="order-list" id="order-list"></div>
+      </section>
+    </div>
+  </main>
+
+  <dialog class="modal modal--wide" id="product-editor-dialog" aria-labelledby="product-editor-title">
+    <form class="modal__surface form-stack" id="product-editor-form">
+      <div class="modal__header">
+        <div><p class="eyebrow">Kho sản phẩm</p><h2 id="product-editor-title">Thêm sản phẩm</h2></div>
+        <button class="icon-button" type="button" data-close-dialog aria-label="Đóng">×</button>
+      </div>
+      <input id="product-id" type="hidden">
+      <div class="form-grid form-grid--two">
+        <label class="field field--wide"><span>Tên sản phẩm *</span><input id="product-name" maxlength="240" minlength="3" required></label>
+        <label class="field"><span>Danh mục *</span><select id="product-category" required></select></label>
+        <label class="field"><span>Giá bán (₫) *</span><input id="product-price" type="number" min="0" max="1000000000" step="1" required></label>
+        <label class="field"><span>Đơn vị tính *</span><input id="product-unit" maxlength="30" required placeholder="Hộp, chai, tuýp…"></label>
+        <label class="field"><span>Loại sản phẩm</span><input id="product-type" maxlength="100"></label>
+        <label class="field"><span>Dạng bào chế</span><input id="product-dosage-forms" maxlength="100"></label>
+        <label class="field"><span>Quy cách đóng gói</span><input id="product-packing" maxlength="100"></label>
+        <label class="field"><span>Xuất xứ thương hiệu</span><input id="product-brand-origin" maxlength="100"></label>
+        <label class="field"><span>Nhà sản xuất</span><input id="product-producer" maxlength="180"></label>
+        <label class="field"><span>Nước sản xuất</span><input id="product-country" maxlength="100"></label>
+        <label class="field"><span>Số đăng ký</span><input id="product-registration" maxlength="80"></label>
+        <label class="field field--wide"><span>Đường dẫn ảnh</span><input id="product-image" type="text" inputmode="url" maxlength="500" placeholder="https://… hoặc /assets/images/…"></label>
+        <label class="field field--wide"><span>Thành phần</span><textarea id="product-ingredient" maxlength="1200" rows="3"></textarea></label>
+        <label class="field field--wide"><span>Mô tả ngắn</span><textarea id="product-description" maxlength="1200" rows="3"></textarea></label>
+      </div>
+      <div class="modal__actions">
+        <button class="button button--ghost" type="button" data-close-dialog>Hủy</button>
+        <button class="button button--primary" id="save-product-button" type="submit">Lưu sản phẩm</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="site-footer"></div>
+  <noscript><p class="noscript">Vui lòng bật JavaScript để sử dụng khu vực vận hành.</p></noscript>
+</body>
+</html>

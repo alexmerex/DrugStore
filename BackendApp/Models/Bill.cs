@@ -9,5 +9,8 @@ namespace BackendApp.Models
         public decimal Tax { get; set; }
         public DateTime Date { get; set; }
         public decimal Total { get; set; }
+        public string Status { get; set; } = "new";
+        public string IdempotencyKey { get; set; } = string.Empty;
+        public string IdempotencyFingerprint { get; set; } = string.Empty;
     }
 }

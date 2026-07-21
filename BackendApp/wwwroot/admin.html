@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b6b4f">
+  <meta name="description" content="Quản trị tài khoản Mộc An Pharmacy.">
+  <title>Quản trị hệ thống | Mộc An Pharmacy</title>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <script type="module" src="/assets/js/admin.js"></script>
+</head>
+<body class="dashboard-body">
+  <a class="skip-link" href="#main-content">Bỏ qua điều hướng</a>
+  <div id="site-header"></div>
+
+  <main id="main-content" class="dashboard section-shell">
+    <div id="admin-guard" class="guard-area" aria-live="polite"></div>
+
+    <div id="admin-app" hidden>
+      <header class="dashboard-heading">
+        <div>
+          <p class="eyebrow">Quyền quản trị</p>
+          <h1>Quản lý tài khoản</h1>
+          <p>Tạo tài khoản, phân quyền và kiểm soát người dùng hệ thống.</p>
+        </div>
+        <button class="button button--primary" id="add-user-button" type="button"><span aria-hidden="true">＋</span> Thêm tài khoản</button>
+      </header>
+
+      <section class="stats-grid" id="admin-stats" aria-label="Tổng quan người dùng"></section>
+
+      <section class="dashboard-panel">
+        <div class="panel-toolbar">
+          <div><h2>Danh sách tài khoản</h2><p id="user-count-label">Đang tải dữ liệu…</p></div>
+          <div class="toolbar-controls">
+            <label class="compact-search" for="user-search">
+              <span class="sr-only">Tìm tài khoản</span>
+              <span class="search-mark" aria-hidden="true"></span>
+              <input id="user-search" type="search" placeholder="Tìm tên đăng nhập…">
+            </label>
+            <label class="select-control select-control--compact" for="user-role-filter">
+              <span class="sr-only">Lọc theo vai trò</span>
+              <select id="user-role-filter">
+                <option value="all">Mọi vai trò</option>
+                <option value="buyer">Khách hàng</option>
+                <option value="staff">Nhân viên</option>
+                <option value="admin">Quản trị viên</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div id="users-management-state"></div>
+        <div class="table-wrap" id="users-table-wrap" hidden>
+          <table class="data-table">
+            <caption class="sr-only">Danh sách tài khoản</caption>
+            <thead><tr><th scope="col">Mã</th><th scope="col">Tên đăng nhập</th><th scope="col">Vai trò</th><th scope="col"><span class="sr-only">Thao tác</span></th></tr></thead>
+            <tbody id="users-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <dialog class="modal" id="user-editor-dialog" aria-labelledby="user-editor-title">
+    <form class="modal__surface form-stack" id="user-editor-form">
+      <div class="modal__header">
+        <div><p class="eyebrow">Tài khoản hệ thống</p><h2 id="user-editor-title">Thêm tài khoản</h2></div>
+        <button class="icon-button" type="button" data-close-dialog aria-label="Đóng">×</button>
+      </div>
+      <input id="user-id" type="hidden">
+      <label class="field"><span>Tên đăng nhập *</span><input id="editor-username" minlength="3" maxlength="60" autocomplete="off" required></label>
+      <label class="field"><span>Vai trò *</span>
+        <select id="editor-role" required>
+          <option value="buyer">Khách hàng</option>
+          <option value="staff">Nhân viên</option>
+          <option value="admin">Quản trị viên</option>
+        </select>
+      </label>
+      <label class="field"><span id="password-label">Mật khẩu *</span><input id="editor-password" type="password" minlength="8" maxlength="128" autocomplete="new-password" required><small id="password-help">Tối thiểu 8 ký tự.</small></label>
+      <div class="modal__actions">
+        <button class="button button--ghost" type="button" data-close-dialog>Hủy</button>
+        <button class="button button--primary" id="save-user-button" type="submit">Lưu tài khoản</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="site-footer"></div>
+  <noscript><p class="noscript">Vui lòng bật JavaScript để sử dụng khu vực quản trị.</p></noscript>
+</body>
+</html>
